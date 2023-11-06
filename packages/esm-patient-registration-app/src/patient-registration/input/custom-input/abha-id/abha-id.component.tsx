@@ -80,7 +80,7 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
 
   const handleGenerateMobileOtp = async () => {
     const reqId = await generateMobileOTPForAbhaAddressVerification({ abhaAddress: patientIdentifier.identifierValue });
-    console.log(reqId);
+    // console.log(reqId);
     setOtpGenerated(true);
     setResendOtp(false);
     setTimeout(() => {
