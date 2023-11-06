@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, useMemo } from 'react';
+import React, { useState, useCallback, useContext, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useField } from 'formik';
 import { Button } from '@carbon/react';
@@ -11,6 +11,7 @@ import { PatientIdentifierValue } from '../../../patient-registration.types';
 import { PatientRegistrationContext } from '../../../patient-registration-context';
 import { Input } from '../../basic-input/input/input.component';
 import styles from '../../input.scss';
+import AbhaId from '../abha-id/abha-id.component';
 
 interface IdentifierInputProps {
   patientIdentifier: PatientIdentifierValue;
@@ -83,6 +84,10 @@ export const IdentifierInput: React.FC<IdentifierInputProps> = ({ patientIdentif
     }
   };
 
+  useEffect(() => {
+    console.log('name', identifierValue);
+  }, [identifierValue]);
+
   return (
     <div className={styles.IDInput}>
       {!autoGeneration && !hideInputField ? (
@@ -95,7 +100,7 @@ export const IdentifierInput: React.FC<IdentifierInputProps> = ({ patientIdentif
           invalid={!!(identifierFieldMeta.touched && identifierFieldMeta.error)}
           invalidText={identifierFieldMeta.error && t(identifierFieldMeta.error)}
           // t('identifierValueRequired', 'Identifier value is required')
-          {...identifierField}
+          // {...identifierField}
         />
       ) : (
         <div className={styles.textID}>
@@ -151,6 +156,7 @@ export const IdentifierInput: React.FC<IdentifierInputProps> = ({ patientIdentif
           </UserHasAccess>
         )}
       </div>
+      <div>{fieldName === 'idCard' && <AbhaId patientIdentifier={patientIdentifier} />}</div>
     </div>
   );
 };

@@ -42,7 +42,7 @@
     "geopattern": "^1.2.3",
     "lodash-es": "^4.17.15",
     "react-avatar": "^4.0.0",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.1",
     "yup": "^0.29.1"
   },
   "peerDependencies": {
