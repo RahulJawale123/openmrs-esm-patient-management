@@ -84,10 +84,6 @@ export const IdentifierInput: React.FC<IdentifierInputProps> = ({ patientIdentif
     }
   };
 
-  useEffect(() => {
-    console.log('name', identifierValue);
-  }, [identifierValue]);
-
   return (
     <div className={styles.IDInput}>
       {!autoGeneration && !hideInputField ? (

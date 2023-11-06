@@ -25,7 +25,7 @@ export const authModeForAbhaAddressVerification = async ({ abhaAddress }: { abha
     await response.text();
     return requestId;
   } catch (e) {
-    console.log('Error occured', e);
+    // console.log('Error occured', e);
   }
 };
 
@@ -54,7 +54,7 @@ export const generateMobileOTPForAbhaAddressVerification = async ({ abhaAddress 
     await response.text();
     return requestId;
   } catch (e) {
-    console.log('Error occured', e);
+    // console.log('Error occured', e);
   }
 };
 
@@ -84,6 +84,6 @@ export const verifyMobileOTPForAbhaAddressVerification = async ({
     await response.text();
     return requestId;
   } catch (e) {
-    console.log('Error occured', e);
+    // console.log('Error occured', e);
   }
 };

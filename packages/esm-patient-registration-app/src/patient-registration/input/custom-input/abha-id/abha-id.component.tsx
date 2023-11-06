@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@carbon/react';
+import { Button, TextInput } from '@carbon/react';
 import { PatientIdentifierValue } from '../../../patient-registration.types';
 import {
   authModeForAbhaAddressVerification,
   generateMobileOTPForAbhaAddressVerification,
   verifyMobileOTPForAbhaAddressVerification,
 } from './abha-id.resource';
-import { TextInput } from '@carbon/react';
 
 interface AuthModeResponse {
   requestId: string;
@@ -35,7 +34,9 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
   let evtSource = new EventSource(ABHA_BASE_URL + '/sse/');
 
   useEffect(() => {
-    if (requestId) fire();
+    if (requestId) {
+      fire();
+    }
     () => {
       evtSource.close();
     };
@@ -45,11 +46,11 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
     evtSource.onmessage = (e) => {
       checkForLatestRequestId({ responseList: JSON.parse(e.data) });
     };
-    console.log('started listening');
+    // console.log('started listening');
   };
 
   const checkForLatestRequestId = ({ responseList }: { responseList: AuthModeResponse[] }) => {
-    console.log(responseList);
+    // console.log(responseList);
     const response: any = responseList?.find((response: AuthModeResponse) => response?.resp?.requestId === requestId);
     if (response?.error?.message) {
       setAvailableVerificationOptions([]);
@@ -57,15 +58,15 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
       setError(response?.error?.message);
       evtSource.close();
     } else if (response && response.auth?.modes) {
-      console.log('Auth mode response', JSON.stringify(response));
+      // console.log('Auth mode response', JSON.stringify(response));
       setAvailableVerificationOptions(response.auth?.modes || []);
       evtSource.close();
     } else if (response && response.auth?.transactionId) {
-      console.log('generate otp response', JSON.stringify(response));
+      // console.log('generate otp response', JSON.stringify(response));
       setTransactionId(response.auth?.transactionId || '');
       evtSource.close();
     } else if (response && response.auth?.patient) {
-      console.log(response.auth.patient);
+      // console.log(response.auth.patient);
       setPatient(response.auth.patient);
     }
   };
@@ -73,7 +74,7 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
   const handleOnClick = async () => {
     handleReset();
     const reqId = await authModeForAbhaAddressVerification({ abhaAddress: patientIdentifier.identifierValue });
-    console.log(reqId);
+    // console.log(reqId);
     setRequestId(reqId);
   };
 
@@ -90,7 +91,7 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
 
   const handleVerifyOtp = async () => {
     const reqId = await verifyMobileOTPForAbhaAddressVerification({ otp, transactionId });
-    console.log(reqId);
+    // console.log(reqId);
     setRequestId(reqId);
   };
 
@@ -131,7 +132,9 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
             required={true}
             placeHolder={'Enter otp'}
             onChange={(e) => {
-              if (!isNaN(e.target.value)) setOtp(e.target.value);
+              if (!isNaN(e.target.value)) {
+                setOtp(e.target.value);
+              }
             }}
           />
           <div style={{ display: 'flex' }}>

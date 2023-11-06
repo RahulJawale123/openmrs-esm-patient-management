@@ -39,7 +39,6 @@
   "genderUnspecified": "Género no especificado",
   "givenNameLabelText": "Nombre",
   "givenNameRequired": "El nombre es obligatorio",
-  "identifierValueRequired": "El valor del identificador es obligatorio",
   "idFieldLabelText": "Identificadores",
   "incompleteForm": "Formulario incompleto",
   "invalidEmail": "Debe indicar un email válido",
