@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, TextInput } from '@carbon/react';
 import { PatientIdentifierValue } from '../../../patient-registration.types';
 import {
@@ -6,6 +6,7 @@ import {
   generateMobileOTPForAbhaAddressVerification,
   verifyMobileOTPForAbhaAddressVerification,
 } from './abha-id.resource';
+import { PatientRegistrationContext } from '../../../patient-registration-context';
 
 interface AuthModeResponse {
   requestId: string;
@@ -21,8 +22,10 @@ interface AuthModeResponse {
 }
 
 export const ABHA_BASE_URL = 'https://hmsicare.liferythem.com/api';
+// export const ABHA_BASE_URL = "https://lifer.pagekite.me/api";
 
 function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierValue }) {
+  const { setFieldValue } = useContext(PatientRegistrationContext);
   const [requestId, setRequestId] = useState<string>('');
   const [transactionId, setTransactionId] = useState<string>('');
   const [availableVerificationOptions, setAvailableVerificationOptions] = useState<string[]>([]);
@@ -41,6 +44,26 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
       evtSource.close();
     };
   }, [requestId]);
+
+  useEffect(() => {
+    // Name: First Middle Last
+    // Gender: M/F
+    // DOB: DD/MM/YYYY
+    if (patient.id) {
+      if (patient.name?.split(' ')?.length == 3) {
+        let patientFullName = patient.name?.split(' ');
+        setFieldValue('givenName', patientFullName?.[0]);
+        setFieldValue('familyName', patientFullName?.[2]);
+        setFieldValue('middleName', patientFullName?.[1]);
+      } else if (patient.name?.split(' ')?.length == 2) {
+        let patientFullName = patient.name?.split(' ');
+        setFieldValue('givenName', patientFullName?.[0]);
+        setFieldValue('familyName', patientFullName?.[1]);
+      }
+      setFieldValue('gender', getGender(patient.gender));
+      setFieldValue('birthdate', new Date(patient.yearOfBirth, patient.monthOfBirth, patient.dayOfBirth));
+    }
+  }, [patient]);
 
   const fire = () => {
     evtSource.onmessage = (e) => {
@@ -104,6 +127,21 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
     setOtpGenerated(false);
     setTransactionId('');
     evtSource.close();
+  };
+
+  const getGender = (acronym: string) => {
+    switch (acronym) {
+      case 'M':
+        return 'Male';
+      case 'F':
+        return 'Female';
+      case 'O':
+        return 'Other';
+      case 'U':
+        return 'Unknown';
+      default:
+        return 'Unknown';
+    }
   };
 
   return (
