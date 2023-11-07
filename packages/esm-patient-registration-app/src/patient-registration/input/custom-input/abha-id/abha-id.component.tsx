@@ -61,7 +61,10 @@ function AbhaId({ patientIdentifier }: { patientIdentifier: PatientIdentifierVal
         setFieldValue('familyName', patientFullName?.[1]);
       }
       setFieldValue('gender', getGender(patient.gender));
-      setFieldValue('birthdate', new Date(patient.yearOfBirth, patient.monthOfBirth, patient.dayOfBirth));
+      setFieldValue(
+        'birthdate',
+        new Date(`${patient.yearOfBirth + '-' + patient.monthOfBirth + '-' + patient.dayOfBirth}`),
+      );
     }
   }, [patient]);
 
